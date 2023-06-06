@@ -1,0 +1,15 @@
+# Importe le module Active Directory
+Import-Module ActiveDirectory
+
+# Définit les informations d'utilisateur
+$userName = "alex"
+$password = ConvertTo-SecureString "Hackmine18" -AsPlainText -Force
+$userDomain = "ADAPTX.org"
+$groupName = "projet"
+$ouPath = "OU=Users,DC=ADAPTX,DC=org"  # Modifiez cette ligne pour spécifier l'OU correcte
+
+# Crée le nouvel utilisateur
+New-ADUser -SamAccountName $userName -UserPrincipalName ("{0}@{1}" -f $userName,$userDomain) -Name $userName -GivenName $userName -Surname "" -Enabled $true -ChangePasswordAtLogon $false -PasswordNeverExpires $true -AccountPassword $password -PassThru -Path $ouPath
+
+# Ajoute l'utilisateur au groupe
+Add-ADGroupMember -Identity $groupName -Members $userName
